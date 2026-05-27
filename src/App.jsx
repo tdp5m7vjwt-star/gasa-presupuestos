@@ -102,7 +102,7 @@ const DOCTORS = [
   'Dra. Marina',
   'Dr. Oscar Gaytan',
   'Dra. Velia Muñoz',
-  'Dr. Jorge Salas'
+  'Dr. Jorge Salas',
   'Dra. Polet Carrillo',
   'Dr. Emilio Esqueda',
 ];
