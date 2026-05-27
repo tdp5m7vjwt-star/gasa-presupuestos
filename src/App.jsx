@@ -88,7 +88,22 @@ const CLINIC = {
 };
 
 const STATUSES = ['Pendiente', 'Aceptado', 'En tratamiento', 'Cancelado'];
-const DOCTORS = ['Dirección', 'Recepción', 'Dr. Maldonado', 'Dra. Zaira', 'Dr. PerezFrutos', 'Dr. Ruiz', 'Dr. Sanchez', 'Dr. Soltero', 'Dra. Gallegos', 'Dra. Herrera', 'Dra. Marina'];
+const DOCTORS = [
+  'Dirección',
+  'Recepción',
+  'Dr. Maldonado',
+  'Dra. Zaira',
+  'Dr. PerezFrutos',
+  'Dr. Ruiz',
+  'Dr. Sanchez',
+  'Dr. Soltero',
+  'Dra. Gallegos',
+  'Dra. Herrera',
+  'Dra. Marina',
+  'Dr. Oscar Gaytan',
+  'Dra. Velia Muñoz',
+  'Dr. Jorge Salas'
+];
 
 const emptyItem = () => ({ id: crypto.randomUUID(), catalogId: '', category: '', treatment: '', qty: 1, price: 0, discount: 0, notes: '' });
 
