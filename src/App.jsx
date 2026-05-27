@@ -103,6 +103,8 @@ const DOCTORS = [
   'Dr. Oscar Gaytan',
   'Dra. Velia Muñoz',
   'Dr. Jorge Salas'
+  'Dra. Polet Carrillo',
+  'Dr. Emilio Esqueda',
 ];
 
 const emptyItem = () => ({ id: crypto.randomUUID(), catalogId: '', category: '', treatment: '', qty: 1, price: 0, discount: 0, notes: '' });
