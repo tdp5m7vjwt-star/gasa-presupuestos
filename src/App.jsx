@@ -4,78 +4,7 @@ import { Search, Printer, Mail, MessageCircle, Plus, Trash2, Copy, FileText, Sav
 import { Button } from './components/ui/button';
 import { Card, CardContent } from './components/ui/card';
 
-const CATALOG = [
-  { id: 'C001', category: 'Consulta y Diagnóstico', treatment: 'Consulta adulto', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'C002', category: 'Consulta y Diagnóstico', treatment: 'Consulta infantil', price: 600, notes: 'Importado de lista GASA 2026' },
-  { id: 'P001', category: 'Preventivos', treatment: 'ATBF', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'P002', category: 'Preventivos', treatment: 'Blanqueamiento + Limpieza', price: 4500, notes: 'Importado de lista GASA 2026' },
-  { id: 'P003', category: 'Preventivos', treatment: 'Clorixin', price: 150, notes: 'Importado de lista GASA 2026' },
-  { id: 'P004', category: 'Preventivos', treatment: 'Limpieza adulto', price: 900, notes: 'Importado de lista GASA 2026' },
-  { id: 'P005', category: 'Preventivos', treatment: 'Limpieza infantil', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'P006', category: 'Preventivos', treatment: 'Saforide', price: 1000, notes: 'Importado de lista GASA 2026' },
-  { id: 'P007', category: 'Preventivos', treatment: 'Sellador', price: 600, notes: 'Importado de lista GASA 2026' },
-  { id: 'O001', category: 'Operatoria / Estética', treatment: 'Blanqueamiento interno', price: 500, notes: 'Importado de lista GASA 2026' },
-  { id: 'O002', category: 'Operatoria / Estética', treatment: 'Carilla E-max', price: null, notes: 'Pendiente de actualización' },
-  { id: 'O003', category: 'Operatoria / Estética', treatment: 'Endoposte + reconstrucción Luxa Core Z', price: 2000, notes: 'Importado de lista GASA 2026' },
-  { id: 'O004', category: 'Operatoria / Estética', treatment: 'Reconstrucción', price: 1500, notes: 'Importado de lista GASA 2026' },
-  { id: 'O005', category: 'Operatoria / Estética', treatment: 'Resina 1 cara', price: 1000, notes: 'Importado de lista GASA 2026' },
-  { id: 'O006', category: 'Operatoria / Estética', treatment: 'Resina 2 caras interproximal', price: 1500, notes: 'Importado de lista GASA 2026' },
-  { id: 'O007', category: 'Operatoria / Estética', treatment: 'Resina anterior estética', price: 1500, notes: 'Importado de lista GASA 2026' },
-  { id: 'O008', category: 'Operatoria / Estética', treatment: 'Resina diente deciduo', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'E001', category: 'Endodoncia', treatment: 'Endodoncia', price: 3800, notes: 'Importado de lista GASA 2026' },
-  { id: 'E002', category: 'Endodoncia', treatment: 'Retratamiento de endodoncia', price: 4000, notes: 'Importado de lista GASA 2026' },
-  { id: 'PER001', category: 'Periodoncia', treatment: 'Curetaje cerrado', price: 1800, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q001', category: 'Cirugía / Maxilofacial', treatment: 'Cirugía 3er molar', price: 3300, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q002', category: 'Cirugía / Maxilofacial', treatment: 'Cirugía resto radicular', price: 3000, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q003', category: 'Cirugía / Maxilofacial', treatment: 'Extracción canino retenido', price: 3300, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q004', category: 'Cirugía / Maxilofacial', treatment: 'Extracción compleja', price: 2500, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q005', category: 'Cirugía / Maxilofacial', treatment: 'Extracción infantil', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q006', category: 'Cirugía / Maxilofacial', treatment: 'Extracción resto radicular simple', price: 1800, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q007', category: 'Cirugía / Maxilofacial', treatment: 'Extracción simple', price: 1500, notes: 'Importado de lista GASA 2026' },
-  { id: 'Q008', category: 'Cirugía / Maxilofacial', treatment: 'Extracción simple (Maxilo)', price: 2000, notes: 'Importado de lista GASA 2026' },
-  { id: 'OP001', category: 'Odontopediatría', treatment: 'Corona acero cromo adulto', price: 2500, notes: 'Importado de lista GASA 2026' },
-  { id: 'OP002', category: 'Odontopediatría', treatment: 'Pulpotomía/Pulpectomía + corona AC', price: 2700, notes: 'Importado de lista GASA 2026' },
-  { id: 'OP003', category: 'Odontopediatría', treatment: 'Pulpotomía/Pulpectomía + corona celuloide', price: 3000, notes: 'Importado de lista GASA 2026' },
-  { id: 'OP004', category: 'Odontopediatría', treatment: 'Pulpotomía/Pulpectomía + corona HERES', price: 3700, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR001', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Alineadores', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR002', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Bracket recementado', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR003', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Consulta Invisalign Zaira', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR004', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Consulta Ortodoncia Maldonado', price: 1000, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR005', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Consulta Ortodoncia Zaira', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR006', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Guarda de acetato', price: 800, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR007', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Hyrax', price: 5000, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR008', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Máscara facial', price: 5000, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR009', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Ortodoncia Final Maldonado', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR010', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Ortodoncia Final Zaira', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR011', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Ortodoncia Inicial Maldonado', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR012', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Ortodoncia Inicial Zaira', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR013', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Ortodoncia Total', price: null, notes: 'Pendiente de actualización' },
-  { id: 'OR014', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Placa activa con tornillo expansor inferior', price: 2800, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR015', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Placa activa con tornillo expansor superior', price: 4200, notes: 'Importado de lista GASA 2026' },
-  { id: 'OR016', category: 'Ortodoncia / Ortopedia / Alineadores', treatment: 'Retiro de ortodoncia', price: 1600, notes: 'Importado de lista GASA 2026' },
-  { id: 'R001', category: 'Prótesis y Rehabilitación', treatment: 'Cementado corona permanente', price: 700, notes: 'Importado de lista GASA 2026' },
-  { id: 'R002', category: 'Prótesis y Rehabilitación', treatment: 'Cementado corona provisional', price: 0, notes: 'Pendiente de actualización' },
-  { id: 'R003', category: 'Prótesis y Rehabilitación', treatment: 'Corona monolítica de zirconia', price: 7500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R004', category: 'Prótesis y Rehabilitación', treatment: 'Prótesis parcial cuerpo metal', price: 9500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R005', category: 'Prótesis y Rehabilitación', treatment: 'Protesis parcial digital', price: 12000, notes: 'Importado de lista GASA 2026' },
-  { id: 'R006', category: 'Prótesis y Rehabilitación', treatment: 'Prótesis parcial unilateral', price: 5000, notes: 'Importado de lista GASA 2026' },
-  { id: 'R007', category: 'Prótesis y Rehabilitación', treatment: 'Prótesis total (ambas arcadas)', price: 12500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R008', category: 'Prótesis y Rehabilitación', treatment: 'Protesis Total (una arcada)', price: 8500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R009', category: 'Prótesis y Rehabilitación', treatment: 'Protesis Valplast bilateral', price: 9500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R010', category: 'Prótesis y Rehabilitación', treatment: 'Prótesis Valplast unilateral', price: 8000, notes: 'Importado de lista GASA 2026' },
-  { id: 'R011', category: 'Prótesis y Rehabilitación', treatment: 'Provisional maquinado PMMA', price: 3500, notes: 'Importado de lista GASA 2026' },
-  { id: 'R012', category: 'Prótesis y Rehabilitación', treatment: 'Retiro de corona', price: 300, notes: 'Importado de lista GASA 2026' },
-  { id: 'I001', category: 'Implantología / Injertos', treatment: 'Extracción + injerto de hueso', price: 6000, notes: 'Importado de lista GASA 2026' },
-  { id: 'I002', category: 'Implantología / Injertos', treatment: 'Extracción + injerto de hueso + corona zirconia', price: 36000, notes: 'Importado de lista GASA 2026' },
-  { id: 'I003', category: 'Implantología / Injertos', treatment: 'Implante + corona zirconia', price: 31000, notes: 'Importado de lista GASA 2026' },
-  { id: 'D001', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dr PerezFrutos', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D002', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dr Ruiz', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D003', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dr Sanchez', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D004', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dr Soltero', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D005', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dra Gallegos', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D006', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dra Herrera', price: null, notes: 'Pendiente de actualización' },
-  { id: 'D007', category: 'Consultas por Doctor / Honorarios', treatment: 'Consulta Dra Marina', price: null, notes: 'Pendiente de actualización' },
-];
+
 
 const CLINIC = {
   name: 'Gasa Médicos y Dentistas',
@@ -149,24 +78,7 @@ async function cargarTratamientos() {
   console.log('TRATAMIENTOS SUPABASE:', tratamientosConvertidos)
   setCatalogo(tratamientosConvertidos)
 }
-async function subirCatalogoASupabase() {
 
-  const tratamientosFormateados = CATALOG.map((item) => ({
-    nombre: item.treatment,
-    categoria: item.category,
-    precio: item.price,
-    notas: item.notes,
-    precio_editable: item.price === null
-  }))
-
-  const { data, error } = await supabase
-    .from('tratamientos')
-    .insert(tratamientosFormateados)
-
-  if (error) {
-    console.error('ERROR SUBIENDO:', error)
-    return
-  }
 
   console.log('CATALOGO SUBIDO:', data)
 }
@@ -457,7 +369,6 @@ if (!session) {
       </div>
     </div>
   );
-}
 
 function PrintableQuote({ quote, totals, money }) {
   return <div id="print-area" className="rounded-2xl bg-white p-8 shadow-sm">
