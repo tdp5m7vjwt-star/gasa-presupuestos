@@ -79,10 +79,6 @@ async function cargarTratamientos() {
   setCatalogo(tratamientosConvertidos)
 }
 
-
-  console.log('CATALOGO SUBIDO:', data)
-}
-
   const [tab, setTab] = useState('presupuesto');
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('Todas');
@@ -369,7 +365,7 @@ if (!session) {
       </div>
     </div>
   );
-
+}
 function PrintableQuote({ quote, totals, money }) {
   return <div id="print-area" className="rounded-2xl bg-white p-8 shadow-sm">
     <div className="mb-8 flex items-start justify-between border-b pb-5" style={{ borderColor: CLINIC.primaryColor }}>
