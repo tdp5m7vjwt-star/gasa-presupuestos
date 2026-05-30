@@ -146,24 +146,119 @@ const categories = useMemo(() => ['Todas', ...Array.from(new Set(catalogo.map((i
     setQuote((q) => ({ ...q, items: q.items.length === 1 && !q.items[0].treatment ? [next] : [...q.items, next] }));
   };
 
-  const saveQuote = () => {
+const saveQuote = async () => {
+  try {
     const patientId = quote.patientId || crypto.randomUUID();
-    const patient = { id: patientId, name: quote.patientName, phone: quote.phone, email: quote.email, notes: '', updatedAt: new Date().toISOString() };
-    const savedQuote = { ...quote, patientId, totals, updatedAt: new Date().toISOString() };
 
+    const patient = {
+      id: patientId,
+      nombre: quote.patientName || 'Sin nombre',
+      telefono: quote.phone || '',
+      email: quote.email || ''
+    };
+
+    const savedQuote = {
+      ...quote,
+      patientId,
+      totals,
+      updatedAt: new Date().toISOString()
+    };
+
+    // 1. Guardar paciente en Supabase
+    const { error: patientError } = await supabase
+      .from('pacientes')
+      .upsert(patient);
+
+    if (patientError) throw patientError;
+
+    // 2. Guardar presupuesto en Supabase
+    const { data: presupuestoData, error: presupuestoError } = await supabase
+      .from('presupuestos')
+      .upsert({
+        folio: quote.folio,
+        paciente_id: patientId,
+        paciente_nombre: quote.patientName,
+        telefono: quote.phone,
+        email: quote.email,
+        doctor: quote.doctor,
+        fecha: quote.date,
+        vigencia: quote.validUntil,
+        estatus: quote.status,
+        subtotal: totals.subtotal,
+        descuento: totals.discount,
+        anticipo: Number(quote.advance || 0),
+        total: totals.total,
+        saldo: totals.balance,
+        notas: quote.notes,
+        condiciones: quote.paymentTerms,
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (presupuestoError) throw presupuestoError;
+
+    // 3. Borrar items anteriores del mismo presupuesto
+    await supabase
+      .from('presupuesto_items')
+      .delete()
+      .eq('presupuesto_id', presupuestoData.id);
+
+    // 4. Guardar tratamientos + tickets básicos
+    const itemsParaGuardar = quote.items
+      .filter((item) => item.treatment)
+      .map((item, index) => {
+        const importe =
+          Number(item.qty || 0) * Number(item.price || 0) -
+          Number(item.discount || 0);
+
+        return {
+          presupuesto_id: presupuestoData.id,
+          tratamiento_id: item.catalogId || null,
+          codigo_tratamiento: item.catalogCode || item.catalogId || '',
+          tratamiento: item.treatment,
+          categoria: item.category || '',
+          cantidad: Number(item.qty || 1),
+          precio: Number(item.price || 0),
+          descuento: Number(item.discount || 0),
+          importe,
+          ticket: `${quote.folio}-T${String(index + 1).padStart(2, '0')}`,
+          estatus_ticket: 'Registrado'
+        };
+      });
+
+    if (itemsParaGuardar.length > 0) {
+      const { error: itemsError } = await supabase
+        .from('presupuesto_items')
+        .insert(itemsParaGuardar);
+
+      if (itemsError) throw itemsError;
+    }
+
+    // 5. Mantener respaldo local
     setPatients((prev) => {
       const exists = prev.some((p) => p.id === patientId);
-      return exists ? prev.map((p) => p.id === patientId ? { ...p, ...patient } : p) : [patient, ...prev];
+      return exists
+        ? prev.map((p) => (p.id === patientId ? { ...p, ...patient, name: patient.nombre, phone: patient.telefono } : p))
+        : [{ id: patientId, name: patient.nombre, phone: patient.telefono, email: patient.email }, ...prev];
     });
+
     setQuotes((prev) => {
       const exists = prev.some((q) => q.id === savedQuote.id);
-      return exists ? prev.map((q) => q.id === savedQuote.id ? savedQuote : q) : [savedQuote, ...prev];
+      return exists
+        ? prev.map((q) => (q.id === savedQuote.id ? savedQuote : q))
+        : [savedQuote, ...prev];
     });
+
     setQuote(savedQuote);
     setSelectedPatient(patientId);
-    setSavedNotice('Presupuesto guardado en historial local.');
+    setSavedNotice('Presupuesto guardado en Supabase y tickets registrados.');
     setTimeout(() => setSavedNotice(''), 2500);
-  };
+  } catch (error) {
+    console.error('Error guardando en Supabase:', error);
+    alert('No se pudo guardar en Supabase. Revisa la consola.');
+  }
+};
 
   const loadPatient = (patient) => {
     setSelectedPatient(patient.id);
